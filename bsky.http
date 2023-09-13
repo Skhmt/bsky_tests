@@ -23,12 +23,11 @@ Authorization: Bearer {{accessJwt}}
 {
     "repo": "{{username}}.bsky.social",
     "collection": "app.bsky.feed.post",
-    "record": 
-        {
-            "text": "First",
-            "createdAt": "0000-01-01T07:53:01Z",
-            "langs": ["en-US"]
-        }
+    "record": {
+        "text": "First",
+        "createdAt": "0000-01-01T07:53:01Z",
+        "langs": ["en-US"]
+    }
 }
 
 ###
@@ -46,6 +45,10 @@ GET https://bsky.social/xrpc/com.atproto.repo.getRecord
 ###
 
 @text = If you're curious - https://github.com/Skhmt/bsky_tests
+@link_byte_start = 20
+@link_byte_end = 55
+@link_uri = https://github.com/Skhmt/bsky_tests
+
 @uri = {{get_uri_cid.response.body.uri}}
 @cid = {{get_uri_cid.response.body.cid}}
 
@@ -57,20 +60,33 @@ Authorization: Bearer {{accessJwt}}
 {
     "repo": "{{username}}.bsky.social",
     "collection": "app.bsky.feed.post",
-    "record": 
-        {
-            "text": "{{text}}",
-            "createdAt": "0000-01-01T07:54:01Z",
-            "langs": ["en-US"],
-            "reply": {
-                "root": {
-                    "uri": "{{uri}}",
-                    "cid": "{{cid}}"
-                },
-                "parent": {
-                    "uri": "{{uri}}",
-                    "cid": "{{cid}}"
-                }
+    "record": {
+        "text": "{{text}}",
+        "createdAt": "0000-01-01T07:54:01Z",
+        "langs": ["en-US"],
+        "reply": {
+            "root": {
+                "uri": "{{uri}}",
+                "cid": "{{cid}}"
+            },
+            "parent": {
+                "uri": "{{uri}}",
+                "cid": "{{cid}}"
             }
-        }
+        },
+        "facets": [
+            {
+                "index": {
+                    "byteStart": {{link_byte_start}},
+                    "byteEnd": {{link_byte_end}}
+                },
+                "features": [
+                    {
+                        "$type": "app.bsky.richtext.facet#link",
+                        "uri": "{{link_uri}}"
+                    }
+                ]
+            }
+        ]
+    }
 }
