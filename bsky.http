@@ -1,6 +1,7 @@
 @username = 
 @password = 
 
+# authentication
 # @name session
 POST https://bsky.social/xrpc/com.atproto.server.createSession
 content-type: application/json
@@ -26,5 +27,49 @@ Authorization: Bearer {{accessJwt}}
         {
             "text": "First",
             "createdAt": "0000-01-01T07:53:01Z"
+        }
+}
+
+###
+
+# e.g. https://bsky.app/profile/sekhmet.bsky.social/post/3k6raqbmuuw2i
+@rkey = 3k6raqbmuuw2i
+
+# gets the uri and cid for a post
+# @name get_uri_cid
+GET https://bsky.social/xrpc/com.atproto.repo.getRecord
+    ?repo={{username}}.bsky.social
+    &collection=app.bsky.feed.post
+    &rkey={{rkey}}
+
+@uri = {{get_uri_cid.response.body.uri}}
+@cid = {{get_uri_cid.response.body.cid}}
+
+###
+
+@text = If you're curious - https://github.com/Skhmt/bsky_tests
+
+# replies at the top level to the post from the previous GET with @text
+POST https://bsky.social/xrpc/com.atproto.repo.createRecord
+content-type: application/json
+Authorization: Bearer {{accessJwt}}
+
+{
+    "repo": "{{username}}.bsky.social",
+    "collection": "app.bsky.feed.post",
+    "record": 
+        {
+            "text": "{{text}}",
+            "createdAt": "0000-01-01T07:54:01Z",
+            "reply": {
+                "root": {
+                    "uri": "{{uri}}",
+                    "cid": "{{cid}}"
+                },
+                "parent": {
+                    "uri": "{{uri}}",
+                    "cid": "{{cid}}"
+                }
+            }
         }
 }
