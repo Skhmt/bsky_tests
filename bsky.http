@@ -26,14 +26,15 @@ Authorization: Bearer {{accessJwt}}
     "record": 
         {
             "text": "First",
-            "createdAt": "0000-01-01T07:53:01Z"
+            "createdAt": "0000-01-01T07:53:01Z",
+            "langs": ["en-US"]
         }
 }
 
 ###
 
-# e.g. https://bsky.app/profile/sekhmet.bsky.social/post/3k6raqbmuuw2i
-@rkey = 3k6raqbmuuw2i
+# e.g. https://bsky.app/profile/sekhmet.bsky.social/post/3k7b6jatky222
+@rkey = 3k7b6jatky222
 
 # gets the uri and cid for a post
 # @name get_uri_cid
@@ -42,12 +43,11 @@ GET https://bsky.social/xrpc/com.atproto.repo.getRecord
     &collection=app.bsky.feed.post
     &rkey={{rkey}}
 
-@uri = {{get_uri_cid.response.body.uri}}
-@cid = {{get_uri_cid.response.body.cid}}
-
 ###
 
 @text = If you're curious - https://github.com/Skhmt/bsky_tests
+@uri = {{get_uri_cid.response.body.uri}}
+@cid = {{get_uri_cid.response.body.cid}}
 
 # replies at the top level to the post from the previous GET with @text
 POST https://bsky.social/xrpc/com.atproto.repo.createRecord
@@ -61,6 +61,7 @@ Authorization: Bearer {{accessJwt}}
         {
             "text": "{{text}}",
             "createdAt": "0000-01-01T07:54:01Z",
+            "langs": ["en-US"],
             "reply": {
                 "root": {
                     "uri": "{{uri}}",
