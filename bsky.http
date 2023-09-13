@@ -1,21 +1,26 @@
-# Get your accessJwt so you can make API calls with this
+@username = 
+@password = 
+
+# @name session
 POST https://bsky.social/xrpc/com.atproto.server.createSession
 content-type: application/json
 
 {
-    "identifier": "[username here].bsky.social",
-    "password": "[password here]"
+    "identifier": "{{username}}.bsky.social",
+    "password": "{{password}}"
 }
+
+@accessJwt = {{session.response.body.accessJwt}}
 
 ###
 
-# Create a post on Jan 1, 0001. 
+# makes a post on Jan 1, 1AD
 POST https://bsky.social/xrpc/com.atproto.repo.createRecord
 content-type: application/json
-Authorization: Bearer [put accessJwt from previous step here]
+Authorization: Bearer {{accessJwt}}
 
 {
-    "repo": "[username here].bsky.social",
+    "repo": "{{username}}.bsky.social",
     "collection": "app.bsky.feed.post",
     "record": 
         {
