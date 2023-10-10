@@ -11,6 +11,8 @@ content-type: application/json
     "password": "{{password}}"
 }
 
+###
+
 @accessJwt = {{session.response.body.accessJwt}}
 
 ###
